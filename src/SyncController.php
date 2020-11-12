@@ -36,6 +36,11 @@ class SyncController implements LoggerAwareInterface
     public $setup;
 
     /**
+     * @var array SyncInterface
+     */
+    private $decorators = [];
+
+    /**
      * Constructor
      */
     public function __construct(
@@ -54,14 +59,16 @@ class SyncController implements LoggerAwareInterface
             $this->collector->start();
             $this->init->run();
 
+            if (empty($this->decorators)) {
+                throw new SyncException("You did not set any class to run against provided data - use ->setDecorators() method");
+            }
+
             while ($this->dataProvider->read()) {
                 try {
                     $sync = null;
                     foreach ($this->decorators as $k => $className) {
-                        if ($k===0) {
-                            if () {
-                                $sync = new $className($this);
-                            }
+                        if ($k === 0) {
+                            $sync = new $className($this);
                         } else {
                             $sync = new $className($sync);
                         }
