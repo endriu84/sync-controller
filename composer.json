@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PandaSoft\\SC\\": "src/"
+            "PandaSoft\\Sync\\": "src/"
         }
     },
     "scripts": {
