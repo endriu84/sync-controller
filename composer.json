@@ -1,0 +1,27 @@
+{
+    "name": "endriu84/sync-controller",
+    "description": "Sync Controller",
+    "authors": [
+        {
+            "name": "Andrzej Misiewicz",
+            "email": "andrzej@pandasoft.pl",
+            "homepage": "https://pandasoft.pl/"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "psr/log": "^1.1.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PandaSoft\\SC\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --colors=always"
+    }
+}
+

@@ -1,0 +1,23 @@
+{
+    "php.suggest.basic": false,
+	"php.validate.enable": false,
+    "files.watcherExclude": {
+        "**/.git/**": true,
+        "**/cache/**": true,
+        "**/tmp/**": true,
+        "**/.backup/**": true,
+        "**/.updates/**": true,
+        "**/.profiler/**": true,
+        "**/.lighthouse/**": true,
+        "**/.tests/**": true,
+        "**/.trash/**": true,
+        "*/node_modules/**": true
+    },
+    "phpsab.standard": "PSR2",
+    "phpsab.fixerEnable": true,
+    "phpsab.snifferEnable": true,
+    "search.useIgnoreFiles": true,
+    "editor.insertSpaces": true,
+    "docker-compose.shell": "/bin/bash",
+    "todo-tree.tree.scanMode": "open files"
+}
