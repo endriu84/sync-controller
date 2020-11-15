@@ -6,5 +6,5 @@ interface DataProviderInterface
 {
     public function read(): bool;
 
-    public function getData(): mixed;
+    public function getData();
 }
