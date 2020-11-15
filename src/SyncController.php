@@ -57,7 +57,7 @@ class SyncController implements LoggerAwareInterface
         try {
             $this->logger->info('Start');
             $this->collector->start();
-            $this->init->run();
+            $this->setup->run();
 
             if (empty($this->decorators)) {
                 throw new SyncException("You did not set any class to run against provided data - use ->setDecorators() method");
