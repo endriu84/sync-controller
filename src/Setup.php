@@ -1,6 +1,6 @@
 <?php
 
-namespace PandaSoft\Sync\Classes;
+namespace PandaSoft\Sync;
 
 class Setup
 {

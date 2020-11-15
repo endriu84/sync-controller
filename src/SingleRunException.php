@@ -1,6 +1,6 @@
 <?php
 
-namespace PandaSoft\Sync\Exception;
+namespace PandaSoft\Sync;
 
 use Exception;
 

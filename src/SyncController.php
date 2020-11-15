@@ -7,11 +7,6 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use ReflectionClass;
 use Exception;
-use PandaSoft\Sync\Exception\SyncException;
-use PandaSoft\Sync\Exception\SingleRunException;
-use PandaSoft\Sync\Classes\Collector;
-use PandaSoft\Sync\Classes\Setup;
-use PandaSoft\Sync\DataProviderInterface;
 
 class SyncController implements LoggerAwareInterface
 {
