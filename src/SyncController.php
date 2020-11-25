@@ -127,10 +127,10 @@ class SyncController implements LoggerAwareInterface
     {
         foreach ($decorators as $k => $className) {
             $class = new ReflectionClass($className);
-            if (!$class->implementsInterface('\PandaSoft\SC\SyncInterface')) {
+            if (!$class->implementsInterface('\PandaSoft\Sync\SyncInterface')) {
                 throw new Exception("Decorator class must implement SyncInterface");
             }
-            if ($k === 0 && !$class->isSubclassOf('\PandaSoft\SC\SyncBase')) {
+            if ($k === 0 && !$class->isSubclassOf('\PandaSoft\Sync\SyncBase')) {
                 throw new Exception("First decorator class must extend SyncBase class");
             }
             unset($class); // TODO is it neccessery?
