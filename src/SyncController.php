@@ -2,11 +2,12 @@
 
 namespace PandaSoft\Sync;
 
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-use ReflectionClass;
 use Exception;
+use ReflectionClass;
+use Psr\Log\NullLogger;
+use PandaSoft\Sync\NullSync;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
 
 class SyncController implements LoggerAwareInterface
 {
@@ -26,14 +27,14 @@ class SyncController implements LoggerAwareInterface
     public $logger;
 
     /**
-     * @var Setup
+     * @var string
      */
-    public $setup;
+    public $entityClass;
 
     /**
      * @var array SyncInterface
      */
-    private $decorators = [];
+    private $decoratorClass = [];
 
     /**
      * Constructor
@@ -44,7 +45,6 @@ class SyncController implements LoggerAwareInterface
         $this->dataProvider = $dataProvider;
         $this->collector = new Collector();
         $this->logger = new NullLogger();
-        $this->setup = new Setup();
     }
 
     public function run()
@@ -52,24 +52,18 @@ class SyncController implements LoggerAwareInterface
         try {
             $this->logger->info('Start');
             $this->collector->start();
-            $this->setup->run();
-
-            if (empty($this->decorators)) {
-                throw new SyncException("You did not set any class to run against provided data - use ->setDecorators() method");
-            }
 
             while ($this->dataProvider->read()) {
                 try {
-                    $sync = null;
-                    foreach ($this->decorators as $k => $className) {
-                        if ($k === 0) {
-                            $sync = new $className($this);
-                        } else {
-                            $sync = new $className($sync);
+                    $entityClass = $this->entityClass;
+                    $component = new $entityClass($this);
+
+                    if (!empty($this->decoratorClass)) {
+                        foreach ($this->decoratorClass as $className) {
+                            $component = new $className($component);
                         }
                     }
-                    $sync->run();
-                    unset($sync);
+                    $component->run();
                 } catch (SingleRunException $e) {
                     // TODO maybe start transaction / rollback here
                     $this->logger->warning($e->getMessage(), [
@@ -85,16 +79,6 @@ class SyncController implements LoggerAwareInterface
 
         $this->collector->stop();
         $this->logger->notice($this->collector);
-    }
-
-    /**
-     * Set the setup object
-     *
-     * @param Setup $setup
-     */
-    public function setSetup(Setup $setup)
-    {
-        $this->setup = $setup;
     }
 
     /**
@@ -123,18 +107,30 @@ class SyncController implements LoggerAwareInterface
      * @param array $decorators
      * @return void
      */
-    public function setDecorators(array $decorators)
+    public function setDecoratorClass(array $decorators): void
     {
         foreach ($decorators as $k => $className) {
             $class = new ReflectionClass($className);
-            if (!$class->implementsInterface('\PandaSoft\Sync\SyncInterface')) {
-                throw new Exception("Decorator class must implement SyncInterface");
+            if (!$class->isSubclassOf('\PandaSoft\Sync\AbstractDecorator')) {
+                throw new Exception("Every decorator class must extend AbstractDecorator class");
             }
-            if ($k === 0 && !$class->isSubclassOf('\PandaSoft\Sync\SyncBase')) {
-                throw new Exception("First decorator class must extend SyncBase class");
-            }
-            unset($class); // TODO is it neccessery?
-            $this->decorators[] = $className;
+            $this->decoratorClass[] = $className;
         }
+    }
+
+    /**
+     * Sets Main component class (like, product, category, order etc)
+     *
+     * @param string $className
+     * @return void
+     */
+    public function setEntityClass(string $className): void
+    {
+        $class = new ReflectionClass($className);
+        if (!$class->implementsInterface('\PandaSoft\Sync\SyncInterface')) {
+            throw new Exception("Component class must implement SyncInterface");
+        }
+
+        $this->entityClass = $className;
     }
 }

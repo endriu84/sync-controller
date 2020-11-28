@@ -2,7 +2,16 @@
 
 namespace PandaSoft\Sync;
 
+use Psr\Log\LoggerInterface;
+use PandaSoft\Sync\CollectorInterface;
+
 interface SyncInterface
 {
     public function run(): void;
+
+    public function log(): LoggerInterface;
+
+    public function collector(): CollectorInterface;
+
+    public function getData(): object;
 }

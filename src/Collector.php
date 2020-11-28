@@ -2,7 +2,9 @@
 
 namespace PandaSoft\Sync;
 
-class Collector
+use PandaSoft\Sync\CollectorInterface;
+
+class Collector implements CollectorInterface
 {
     /** @var int[] */
     private $incrementData = [];
@@ -17,7 +19,7 @@ class Collector
      * @param string $variable
      * @param int    $value    The amount to increment the counter by
      */
-    public function measure($variable, $value)
+    public function measure($variable, $value): void
     {
         if (!isset($this->incrementData[$variable])) {
             $this->incrementData[$variable] = 0;
@@ -30,7 +32,7 @@ class Collector
      *
      * @param string $variable
      */
-    public function increment($variable)
+    public function increment($variable): void
     {
         $this->measure($variable, 1);
     }
@@ -40,18 +42,18 @@ class Collector
      *
      * @param string $variable
      */
-    public function decrement($variable)
+    public function decrement($variable): void
     {
         $this->measure($variable, -1);
     }
 
-    public function start()
+    public function start(): void
     {
         $this->timing('start_time', \microtime(true));
         $this->gauge('start_memory', \memory_get_usage());
     }
 
-    public function stop()
+    public function stop(): void
     {
         if ($start_time = $this->getTiming('start_time')) {
             $this->timing('execution_time', \microtime(true) - $start_time);
@@ -67,7 +69,7 @@ class Collector
      * @param string $variable
      * @param int    $time     The duration of the timing in milliseconds
      */
-    public function timing($variable, $time)
+    public function timing($variable, $time): void
     {
         if (!isset($this->timingData[$variable])) {
             $this->timingData[$variable] = 0;
@@ -78,7 +80,7 @@ class Collector
     /**
      * Sends the metrics to the adapter backend.
      */
-    public function flush()
+    public function flush(): void
     {
         $this->timingData = [];
         $this->gaugeData = [];
@@ -91,7 +93,7 @@ class Collector
      * @param string $variable
      * @param int    $value
      */
-    public function gauge($variable, $value)
+    public function gauge($variable, $value): void
     {
         $sign = substr($value, 0, 1);
 
@@ -111,7 +113,7 @@ class Collector
      *
      * @return int
      */
-    public function getMeasure($variable)
+    public function getMeasure($variable): int
     {
         return isset($this->incrementData[$variable]) ? $this->incrementData[$variable] : 0;
     }
@@ -123,7 +125,7 @@ class Collector
      *
      * @return int
      */
-    public function getGauge($variable)
+    public function getGauge($variable): int
     {
         return isset($this->gaugeData[$variable]) ? $this->gaugeData[$variable] : 0;
     }
@@ -135,7 +137,7 @@ class Collector
      *
      * @return int
      */
-    public function getTiming($variable)
+    public function getTiming($variable): int
     {
         return isset($this->timingData[$variable]) ? $this->timingData[$variable] : 0;
     }
