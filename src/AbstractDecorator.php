@@ -40,4 +40,14 @@ abstract class AbstractDecorator implements SyncInterface
     {
         return $this->sync->getData();
     }
+
+    public function id(): int
+    {
+        return $this->sync->id();
+    }
+
+    public function supplierName(): string
+    {
+        return $this->sync->supplierName();
+    }
 }

@@ -12,8 +12,8 @@ abstract class AbstractEntity implements SyncInterface
      *
      * @var boolean
      */
-    protected $id = false;
-    
+    protected $id = 0;
+
     /**
      * @var SyncController
      */
@@ -74,5 +74,15 @@ abstract class AbstractEntity implements SyncInterface
     public function supplierName(): string
     {
         return $this->sc->dataProvider->supplierName();
+    }
+
+    /**
+     * Get Entity object ID
+     *
+     * @return integer
+     */
+    public function id(): int
+    {
+        return $this->id;
     }
 }

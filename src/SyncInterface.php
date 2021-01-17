@@ -14,4 +14,8 @@ interface SyncInterface
     public function collector(): CollectorInterface;
 
     public function getData(): object;
+
+    public function id(): int;
+    
+    public function supplierName(): string;
 }
