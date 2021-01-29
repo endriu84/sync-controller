@@ -18,4 +18,6 @@ interface SyncInterface
     public function id(): int;
     
     public function supplierName(): string;
+
+    public function firstImport(): bool;
 }

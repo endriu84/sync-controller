@@ -50,4 +50,9 @@ abstract class AbstractDecorator implements SyncInterface
     {
         return $this->sync->supplierName();
     }
+
+    public function firstImport(): bool
+    {
+        return $this->sync->firstImport();
+    }
 }

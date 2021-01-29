@@ -15,6 +15,13 @@ abstract class AbstractEntity implements SyncInterface
     protected $id = 0;
 
     /**
+     * Undocumented variable
+     *
+     * @var boolean
+     */
+    protected $firstImport = false;
+
+    /**
      * @var SyncController
      */
     protected $sc;
@@ -84,5 +91,15 @@ abstract class AbstractEntity implements SyncInterface
     public function id(): int
     {
         return $this->id;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return integer
+     */
+    public function firstImport(): bool
+    {
+        return $this->firstImport;
     }
 }
